@@ -1,0 +1,126 @@
+<div class="dashboard-container">
+    <app-sidebar></app-sidebar>
+
+    <main class="main-content">
+        <div *ngIf="errorMessage" style="text-align: center; padding: 20px; background-color: #fee2e2; color: #dc2626; border-radius: 8px; margin-bottom: 20px;">
+            <p><strong>Error:</strong> {{ errorMessage }}</p>
+            <button routerLink="/patients" style="background:none; border:none; text-decoration:underline; cursor:pointer; color:inherit;">Volver a la lista</button>
+        </div>
+
+        <div *ngIf="!patient && !errorMessage" style="text-align: center; padding: 40px;">
+            <h3>Cargando información del paciente...</h3>
+            <p style="color:red; font-size:12px">Si este mensaje persiste, hubo un error al cargar.</p>
+        </div>
+
+        <header class="page-header" *ngIf="patient">
+            <a routerLink="/patients" class="btn-back">
+                <span class="icon">←</span> Volver
+            </a>
+            <div class="header-text">
+                <h2>{{ patient.nombres }} {{ patient.apellidos }}</h2>
+                <p>DNI: {{ patient.dni }}</p>
+            </div>
+            
+            <div class="header-actions">
+                 <button class="btn-pdf">📥 Exportar PDF</button>
+                 <button class="btn-new-monitoring" [routerLink]="['/patients', patient.idPaciente, 'new-monitoring']">+ Nuevo Monitoreo</button>
+            </div>
+        </header>
+
+        <div class="details-grid" *ngIf="patient">
+            <!-- 1. Personal Info -->
+            <div class="info-card">
+                <div class="card-title">👤 Información del Paciente</div>
+                <div class="card-row">
+                    <span class="label">Nombres</span>
+                    <span class="value">{{ patient.nombres }}</span>
+                </div>
+                <div class="card-row">
+                    <span class="label">Apellidos</span>
+                    <span class="value">{{ patient.apellidos }}</span>
+                </div>
+                <!-- TODO: Calculate Age -->
+                <div class="card-row">
+                    <span class="label">Edad</span>
+                    <span class="value">{{ calculateAge(patient.fechaNacimiento) }} años</span>
+                </div>
+                 <div class="card-row">
+                    <span class="label">Fecha de Nacimiento</span>
+                    <span class="value">{{ patient.fechaNacimiento }}</span>
+                </div>
+                <div class="card-footer">
+                    <button class="link-btn">Editar Paciente</button>
+                </div>
+            </div>
+
+            <!-- 2. Obstetric Info -->
+             <div class="info-card">
+                <div class="card-title">📅 Información Obstétrica</div>
+                 <div class="card-row">
+                    <span class="label">Fecha Probable de Parto</span>
+                    <span class="value">{{ patient.fechaProbableParto || 'No registrada' }}</span>
+                </div>
+                <div class="card-row">
+                    <span class="label">Total de Monitoreos</span>
+                    <span class="value">{{ monitorings.length }}</span>
+                </div>
+            </div>
+
+            <!-- 3. Risk Status -->
+             <div class="info-card">
+                <div class="card-title">📈 Estado de Riesgo Actual</div>
+                 <div class="card-row">
+                    <span class="label">Nivel de Riesgo</span>
+                    <span *ngIf="monitorings.length > 0" class="risk-badge" 
+                        [class.risk-high]="monitorings[0]?.nivelRiesgo === 'Alto' || monitorings[0]?.nivelRiesgo === 'Patológico'"
+                        [class.risk-medium]="monitorings[0]?.nivelRiesgo === 'Medio' || monitorings[0]?.nivelRiesgo === 'Sospechoso'"
+                        [class.risk-low]="monitorings[0]?.nivelRiesgo === 'Bajo' || monitorings[0]?.nivelRiesgo === 'Normal'">
+                        {{ monitorings[0]?.nivelRiesgo }}
+                    </span>
+                    <span *ngIf="monitorings.length === 0" class="value" style="font-weight: normal; color: #6B7280;">
+                        Aún no hay monitoreos
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monitoring List Section -->
+        <div class="monitorings-section">
+            <div class="section-tabs">
+                <button class="tab active">Historial de Monitoreos</button>
+            </div>
+
+            <div class="monitoring-list">
+                <div class="monitoring-card" *ngFor="let mon of monitorings">
+                    <div class="monitoring-header">
+                        <div class="mon-left">
+                            <div class="mon-image-placeholder">
+                                <img *ngIf="mon.imagenCtg" [src]="'data:image/jpeg;base64,' + mon.imagenCtg" class="ctg-thumb">
+                                <span *ngIf="!mon.imagenCtg">Sin Imagen</span>
+                            </div>
+                            <div class="mon-info">
+                                <h3>{{ mon.fechaMonitoreo | date:'fullDate' | titlecase }}</h3>
+                                <p>Por: {{ mon.medico.titulo }} {{ mon.medico.nombres }} {{ mon.medico.apellidos }}</p>
+                            </div>
+                        </div>
+                         <span class="risk-badge-small" 
+                             [class.risk-high]="mon.nivelRiesgo === 'Patológico'"
+                             [class.risk-medium]="mon.nivelRiesgo === 'Sospechoso'"
+                             [class.risk-low]="mon.nivelRiesgo === 'Normal'">
+                            {{ mon.nivelRiesgo }}
+                        </span>
+                    </div>
+                    
+                    <div class="mon-notes" *ngIf="mon.observaciones">
+                        <strong>Notas Clínicas:</strong>
+                        <p>{{ mon.observaciones }}</p>
+                    </div>
+                </div>
+                <div *ngIf="monitorings.length === 0" class="empty-state" style="text-align: center; padding: 32px; color: #6B7280;">
+                    No hay monitoreos registrados.
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>

@@ -1,0 +1,45 @@
+<div class="dashboard-container">
+    <app-sidebar></app-sidebar>
+
+    <main class="main-content">
+        <header class="page-header">
+            <h2>Mis Pacientes ({{ patients.length }})</h2>
+        </header>
+
+        <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Buscar por nombre o DNI (mínimo 3 caracteres)..." [(ngModel)]="searchTerm">
+        </div>
+
+        <div class="patients-list">
+            <div class="patient-card" *ngFor="let p of paginatedPatients" (click)="viewDetails(p.idPaciente)" style="cursor: pointer;">
+                <div class="patient-details">
+                    <h3>{{ p.nombres }} {{ p.apellidos }}</h3>
+                    <p>DNI: {{ p.dni }}</p>
+                    <p>F. Nacimiento: {{ p.fechaNacimiento }}</p>
+                    <p>FPP: {{ p.fechaProbableParto }}</p>
+                </div>
+                <!-- Placeholder for risk until Monitoreo is linked -->
+                <div class="patient-status">
+                     <span class="risk-badge low">--</span>
+                </div>
+            </div>
+            
+            <div *ngIf="patients.length === 0" style="text-align: center; padding: 20px;">
+                <p>No se encontraron pacientes registrados.</p>
+            </div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <!-- Pagination Controls -->
+        <mat-paginator
+            [length]="filteredPatients.length"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[2, 5, 10, 25]"
+            [pageIndex]="pageIndex"
+            (page)="handlePageEvent($event)"
+            showFirstLastButtons
+            aria-label="Select page">
+        </mat-paginator>
+    </main>
+</div>

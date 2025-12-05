@@ -1,0 +1,346 @@
+/* Layout similar to Dashboard but specific to this view */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #F9FAFB;
+}
+
+.main-content {
+    flex: 1;
+    padding: 32px;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.btn-back {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border: 1px solid #E5E7EB;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #374151;
+}
+
+.header-text h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.header-text p {
+    color: #6B7280;
+    font-size: 14px;
+    margin: 4px 0 0 0;
+}
+
+/* Grid Layout */
+.content-grid {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 32px;
+    align-items: flex-start;
+}
+
+/* Info Panel */
+.info-panel {
+    width: 300px;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.panel-header {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 24px;
+}
+
+.info-item {
+    margin-bottom: 16px;
+}
+
+.info-item label {
+    display: block;
+    font-size: 13px;
+    color: #6B7280;
+    margin-bottom: 4px;
+}
+
+.info-item .value {
+    font-size: 15px;
+    font-weight: 500;
+    color: #111827;
+}
+
+/* Upload Panel */
+.upload-panel {
+    flex: 1;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.drop-zone {
+    border: 2px dashed #D1D5DB;
+    border-radius: 8px;
+    padding: 48px;
+    text-align: center;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.drop-zone:hover {
+    border-color: #6B7280;
+    background-color: #F9FAFB;
+}
+
+.upload-icon {
+    font-size: 48px;
+    color: #9CA3AF;
+    margin-bottom: 16px;
+}
+
+.upload-text h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    margin: 0 0 8px 0;
+}
+
+.upload-text p {
+    font-size: 14px;
+    color: #6B7280;
+    margin: 0 0 16px 0;
+}
+
+.btn-select-file {
+    background: white;
+    border: 1px solid #D1D5DB;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+}
+
+.upload-hint {
+    font-size: 12px;
+    color: #9CA3AF;
+    margin-top: 16px;
+}
+
+/* Preview Zone */
+.preview-zone {
+    position: relative;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    background: #f3f4f6;
+    height: 300px;
+    /* Fixed height for preview */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ctg-preview {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.btn-remove {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #EF4444;
+    /* Red */
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-remove:hover {
+    background: #DC2626;
+}
+
+/* Success Box */
+.success-box {
+    background-color: #ECFDF5;
+    /* Light green */
+    border: 1px solid #D1FAE5;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.success-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #065F46;
+    /* Dark green */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.success-box p {
+    margin: 0;
+    font-size: 13px;
+    color: #047857;
+    margin-left: 24px;
+    /* Indent under icon */
+}
+
+/* File Info Box */
+.file-info-box {
+    background-color: #F9FAFB;
+    /* Gray */
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: #374151;
+}
+
+/* Info Box (Important) */
+.info-box {
+    background-color: #EFF6FF;
+    /* Light blue */
+    border: 1px solid #BFDBFE;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.info-title {
+    font-weight: 600;
+    color: #1E40AF;
+    /* Dark blue */
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.info-box p {
+    margin: 0;
+    font-size: 13px;
+    color: #1E3A8A;
+}
+
+/* Actions */
+.actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.btn-cancel {
+    background: white;
+    border: 1px solid #D1D5DB;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+}
+
+.btn-save {
+    background: #9CA3AF;
+    /* Disabled/Gray initially */
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: white;
+    cursor: not-allowed;
+    flex: 1;
+    /* Stretch to fill */
+    max-width: none;
+}
+
+.btn-save.btn-black {
+    background: #111827;
+    /* Black */
+    cursor: pointer;
+}
+
+/* Toast (Top Right) */
+.toast-notification {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    background: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 1000;
+    font-size: 14px;
+    font-weight: 500;
+    color: #111827;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Process Desc */
+.process-desc {
+    background: #eff6ff;
+    padding: 24px;
+    border-radius: 8px;
+    color: #1e3a8a;
+}
+
+.process-desc h4 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.process-desc ol {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 13px;
+    line-height: 1.6;
+}

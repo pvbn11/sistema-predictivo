@@ -1,0 +1,87 @@
+<div class="dashboard-container">
+    <app-sidebar></app-sidebar>
+
+    <main class="main-content">
+        <header class="page-header">
+            <a routerLink="/dashboard" class="btn-back">
+                <span class="icon">←</span> Volver
+            </a>
+            <div class="header-text">
+                <h2>Nueva Paciente</h2>
+                <p>Registre los datos básicos de la nueva paciente</p>
+            </div>
+        </header>
+
+        <div class="form-card">
+            <div class="card-header">
+                <span class="icon">👤</span> Información de la Paciente
+            </div>
+            
+            <form (ngSubmit)="save()" #patientForm="ngForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombres">Nombres *</label>
+                        <input type="text" id="nombres" name="nombres" placeholder="Ingrese los nombres" 
+                               [(ngModel)]="patient.nombres" required #nombres="ngModel"
+                               [class.input-error]="(nombres.invalid && (nombres.dirty || nombres.touched))">
+                        <div *ngIf="(nombres.invalid && (nombres.dirty || nombres.touched))" class="error-msg">
+                            Los nombres son obligatorios
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellidos">Apellidos *</label>
+                        <input type="text" id="apellidos" name="apellidos" placeholder="Ingrese los apellidos" 
+                               [(ngModel)]="patient.apellidos" required #apellidos="ngModel"
+                               [class.input-error]="(apellidos.invalid && (apellidos.dirty || apellidos.touched))">
+                        <div *ngIf="(apellidos.invalid && (apellidos.dirty || apellidos.touched))" class="error-msg">
+                            Los apellidos son obligatorios
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dni">DNI *</label>
+                    <input type="text" id="dni" name="dni" placeholder="12345678" 
+                           [(ngModel)]="patient.dni" required minlength="8" maxlength="8" pattern="\d*" #dni="ngModel"
+                           [class.input-error]="(dni.invalid && (dni.dirty || dni.touched)) || (formSubmitted && !patient.dni) || registerError">
+                    
+                    <div *ngIf="registerError" class="error-msg">{{ registerError }}</div>
+                    <div *ngIf="(dni.invalid && (dni.dirty || dni.touched)) || (formSubmitted && !patient.dni)" class="error-msg">
+                        <span *ngIf="dni.errors?.['required']">El DNI es obligatorio</span>
+                        <span *ngIf="dni.errors?.['pattern'] || dni.errors?.['minlength']">Formato: 8 números (ej: 12345678)</span>
+                    </div>
+                    <span class="helper-text" *ngIf="!dni.invalid && !registerError">Formato: 8 números (ej: 12345678)</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="fechaNacimiento">Fecha de Nacimiento *</label>
+                    <input type="date" id="fechaNacimiento" name="fechaNacimiento" 
+                           [(ngModel)]="patient.fechaNacimiento" required #dob="ngModel"
+                           [class.input-error]="(dob.invalid && (dob.dirty || dob.touched)) || (formSubmitted && !patient.fechaNacimiento) || isFutureDate(patient.fechaNacimiento)">
+                    
+                    <div *ngIf="(dob.invalid && (dob.dirty || dob.touched)) || (formSubmitted && !patient.fechaNacimiento)" class="error-msg">
+                        La fecha de nacimiento es obligatoria
+                    </div>
+                    <div *ngIf="isFutureDate(patient.fechaNacimiento)" class="error-msg">
+                        La fecha no puede ser futura
+                    </div>
+                </div>
+
+                <div class="info-msg" *ngIf="calculatedAge !== null">
+                    📅 Edad calculada: {{ calculatedAge }} años
+                </div>
+
+                <div class="form-group">
+                    <label for="fpp">Fecha Probable de Parto (Opcional)</label>
+                    <input type="date" id="fpp" name="fpp" [(ngModel)]="patient.fechaProbableParto">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" (click)="cancel()">Cancelar</button>
+                    <button type="submit" class="btn-save">Guardar Paciente</button>
+                </div>
+            </form>
+        </div>
+
+    </main>
+</div>

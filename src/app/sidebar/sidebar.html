@@ -1,0 +1,31 @@
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>Sistema Prenatal</h2>
+        <p>Dra. Ana Rodríguez</p>
+    </div>
+    <nav class="sidebar-nav">
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+            <span class="icon">📈</span>
+            Panel Principal
+        </a>
+        <a routerLink="/patients" routerLinkActive="active" class="nav-item">
+            <span class="icon">👥</span>
+            Mis Pacientes
+        </a>
+        <a routerLink="/new-patient" routerLinkActive="active" class="nav-item">
+            <span class="icon">➕</span>
+            Nueva Paciente
+        </a>
+        <a routerLink="/profile" routerLinkActive="active" class="nav-item">
+            <span class="icon">⚙️</span>
+            Mi Perfil
+        </a>
+    </nav>
+    
+    <div class="sidebar-footer">
+        <button (click)="logout()" class="nav-item logout-btn">
+            <span class="icon">🚪</span>
+            Cerrar Sesión
+        </button>
+    </div>
+</aside>

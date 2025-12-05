@@ -1,0 +1,112 @@
+<div class="dashboard-container">
+    <app-sidebar></app-sidebar>
+
+    <!-- Top Toast -->
+    <div class="toast-notification" *ngIf="toast.show">
+        <span class="icon">✅</span> {{ toast.message }}
+    </div>
+
+    <main class="main-content">
+        <header class="page-header" *ngIf="patient">
+            <button (click)="onCancel()" class="btn-back">
+                <span class="icon">←</span> Volver
+            </button>
+            <div class="header-text">
+                <h2>Nuevo Monitoreo</h2>
+                <p>Paciente: {{ patient.nombres }} {{ patient.apellidos }}</p>
+            </div>
+        </header>
+
+        <div class="content-grid" *ngIf="patient">
+            <!-- Left Info Panel -->
+            <div class="info-panel">
+                <div class="panel-header">Información de la Paciente</div>
+                <div class="info-content">
+                    <div class="info-item">
+                        <label>Nombre</label>
+                        <div class="value">{{ patient.nombres }} {{ patient.apellidos }}</div>
+                    </div>
+                    <div class="info-item">
+                        <label>DNI</label>
+                        <div class="value">{{ patient.dni }}</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Edad</label>
+                        <div class="value">{{ calculateAge(patient.fechaNacimiento) }} años</div>
+                    </div>
+                    <div class="info-item">
+                        <label>FPP</label>
+                        <div class="value">{{ patient.fechaProbableParto | date:'dd/MM/yyyy' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <label>Fecha del Monitoreo</label>
+                        <div class="value">{{ todayDate | date:'d/MM/yyyy' }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Upload Panel -->
+            <div class="upload-panel">
+                <div class="panel-header">
+                    <span class="icon">🖼️</span> Carga de Imagen CTG
+                </div>
+
+                <!-- 1. Drop Zone (Hidden if file uploaded) -->
+                <div class="drop-zone" (dragover)="onDragOver($event)" (drop)="onDrop($event)" *ngIf="!uploadedFile">
+                    <div class="upload-icon">↑</div>
+                    <div class="upload-text">
+                        <h3>Arrastre y suelte la imagen del trazado CTG</h3>
+                        <p>o haga clic para seleccionar un archivo</p>
+                    </div>
+                    
+                    <input type="file" #fileInput (change)="onFileSelected($event)" accept=".jpg, .jpeg" style="display: none;">
+                    <button class="btn-select-file" (click)="fileInput.click()">Seleccionar Archivo</button>
+                    
+                    <p class="upload-hint">Solo archivos JPG. Tamaño máximo: 10MB</p>
+                </div>
+
+                <!-- 2. Preview (Shown if file uploaded) -->
+                <div class="preview-zone" *ngIf="uploadedFile && uploadedFileUrl">
+                    <img [src]="uploadedFileUrl" alt="CTG Preview" class="ctg-preview">
+                    <button class="btn-remove" (click)="removeFile()">✖</button>
+                </div>
+
+                <!-- 3. Success Message -->
+                <div class="success-box" *ngIf="uploadedFile">
+                    <div class="success-title">
+                        <span class="icon">✅</span> Imagen cargada correctamente.
+                    </div>
+                    <p>El sistema procesará automáticamente el trazado CTG al hacer clic en "Guardar y Analizar".</p>
+                </div>
+
+                <!-- 4. File Info Box -->
+                <div class="file-info-box" *ngIf="uploadedFile">
+                    <div><strong>Archivo:</strong> {{ selectedFileName }}</div>
+                    <div><strong>Tamaño:</strong> {{ formatFileSize(uploadedFile.size) }}</div>
+                </div>
+
+                <!-- 5. Important Info -->
+                <div class="info-box">
+                    <div class="info-title">⚠️ Importante:</div>
+                    <p>Asegúrese de que la imagen del trazado CTG sea clara y completa para obtener una extracción precisa de los parámetros.</p>
+                </div>
+
+                <div class="actions">
+                    <button class="btn-cancel" (click)="onCancel()">Cancelar</button>
+                    <button class="btn-save" (click)="onSave()" [class.btn-black]="uploadedFile">Guardar y Analizar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Process Description (Bottom) -->
+        <div class="process-desc">
+            <h4>Proceso de análisis:</h4>
+            <ol>
+                <li>Suba la imagen del trazado de cardiotocografía (CTG) en formato JPG</li>
+                <li>El sistema extraerá automáticamente los parámetros clave (línea de base, variabilidad, etc.)</li>
+                <li>Se ejecutará el modelo predictivo para calcular el nivel de riesgo</li>
+                <li>Podrá revisar los resultados y agregar notas clínicas</li>
+            </ol>
+        </div>
+    </main>
+</div>

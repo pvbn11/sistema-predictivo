@@ -1,0 +1,104 @@
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #F8F9FA;
+}
+
+.main-content {
+    flex: 1;
+    padding: 32px;
+}
+
+.page-header {
+    margin-bottom: 24px;
+}
+
+.page-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+/* Search Bar */
+.search-bar {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    background-color: #F9FAFB;
+    font-size: 14px;
+    color: #374151;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.search-bar input::placeholder {
+    color: #9CA3AF;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9CA3AF;
+    font-size: 16px;
+}
+
+/* Patients List */
+.patients-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.patient-card {
+    background-color: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.patient-details h3 {
+    margin: 0 0 4px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.patient-details p {
+    margin: 2px 0;
+    font-size: 13px;
+    color: #6B7280;
+}
+
+.risk-badge {
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.risk-badge.high {
+    background-color: #FEF2F2;
+    color: #DC2626;
+}
+
+.risk-badge.medium {
+    background-color: #FFFBEB;
+    color: #D97706;
+}
+
+.risk-badge.low {
+    background-color: #ECFDF5;
+    color: #059669;
+}

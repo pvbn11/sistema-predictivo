@@ -1,0 +1,142 @@
+<div class="dashboard-container">
+    <app-sidebar></app-sidebar>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div>
+                <h1>Panel Principal</h1>
+                <p class="subtitle">Resumen de pacientes y monitoreos recientes</p>
+            </div>
+            <div class="date">
+                viernes, 5 de diciembre de 2025
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span class="stat-label">Total Pacientes</span>
+                    <span class="stat-value">3</span>
+                </div>
+                <div class="stat-icon blue">👥</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span class="stat-label">Riesgo Alto</span>
+                    <span class="stat-value error">1</span>
+                </div>
+                <div class="stat-icon red">⚠️</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span class="stat-label">Riesgo Medio</span>
+                    <span class="stat-value warning">1</span>
+                </div>
+                <div class="stat-icon yellow">↗️</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <span class="stat-label">Riesgo Bajo</span>
+                    <span class="stat-value success">1</span>
+                </div>
+                <div class="stat-icon green">📉</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <!-- High Risk Patients -->
+            <div class="card high-risk-card">
+                <div class="card-header warning-header">
+                     <span class="icon">⚠️</span> Pacientes de Mayor Riesgo
+                </div>
+                <div class="patient-list">
+                    <div class="patient-item">
+                        <div class="patient-info">
+                            <h3>María González García</h3>
+                            <p>DNI: 12345678</p>
+                        </div>
+                        <div class="patient-actions">
+                            <span class="risk-badge high">85%</span>
+                            <button class="btn-icon">+</button>
+                        </div>
+                    </div>
+                    <div class="patient-item">
+                        <div class="patient-info">
+                            <h3>Carmen López Martín</h3>
+                            <p>DNI: 87654321</p>
+                        </div>
+                        <div class="patient-actions">
+                            <span class="risk-badge medium">55%</span>
+                            <button class="btn-icon">+</button>
+                        </div>
+                    </div>
+                    <div class="patient-item">
+                        <div class="patient-info">
+                            <h3>Ana Fernández Ruiz</h3>
+                            <p>DNI: 11223344</p>
+                        </div>
+                        <div class="patient-actions">
+                            <span class="risk-badge low">15%</span>
+                            <button class="btn-icon">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Monitorings -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">📉</span> Monitoreos Recientes
+                </div>
+                 <div class="monitoring-list">
+                    <div class="monitoring-item">
+                        <div class="monitoring-info">
+                            <h3>María González García</h3>
+                            <p>30/9/2024</p>
+                            <p>Línea base: 140 lpm</p>
+                        </div>
+                        <span class="status-badge high">Alto</span>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-info">
+                            <h3>Carmen López Martín</h3>
+                            <p>27/9/2024</p>
+                            <p>Línea base: 150 lpm</p>
+                        </div>
+                        <span class="status-badge medium">Medio</span>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-info">
+                            <h3>Ana Fernández Ruiz</h3>
+                            <p>24/9/2024</p>
+                            <p>Línea base: 135 lpm</p>
+                        </div>
+                        <span class="status-badge low">Bajo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+             <h3>Acciones Rápidas</h3>
+             <div class="actions-grid">
+                 <button class="action-btn primary">
+                     <span class="plus">+</span>
+                     Nueva Paciente
+                 </button>
+                 <button class="action-btn secondary">
+                     <span>📉</span>
+                     Nuevo Monitoreo
+                 </button>
+                 <button class="action-btn secondary">
+                     <span>👥</span>
+                     Ver Todas las Pacientes
+                 </button>
+             </div>
+        </div>
+
+    </main>
+</div>

@@ -1,0 +1,334 @@
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #F8F9FA;
+}
+
+/* Sidebar handled by component */
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 32px;
+    overflow-y: auto;
+}
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+}
+
+.top-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #6B7280;
+    margin: 4px 0 0 0;
+}
+
+.date {
+    font-size: 14px;
+    color: #9CA3AF;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #E5E7EB;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #6B7280;
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.stat-value.error {
+    color: #DC2626;
+}
+
+.stat-value.warning {
+    color: #D97706;
+}
+
+.stat-value.success {
+    color: #059669;
+}
+
+.stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+.stat-icon.blue {
+    background-color: #EFF6FF;
+    color: #2563EB;
+}
+
+.stat-icon.red {
+    background-color: #FEF2F2;
+    color: #DC2626;
+}
+
+.stat-icon.yellow {
+    background-color: #FFFBEB;
+    color: #D97706;
+}
+
+.stat-icon.green {
+    background-color: #ECFDF5;
+    color: #059669;
+}
+
+/* Content Grid */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    /* Left column slightly wider */
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+@media (max-width: 1024px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    border: 1px solid #E5E7EB;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #E5E7EB;
+    font-weight: 500;
+    color: #111827;
+    display: flex;
+    align-items: center;
+}
+
+.card-header .icon {
+    margin-right: 8px;
+}
+
+.warning-header {
+    color: #DC2626;
+    background-color: #FEF2F2;
+    border-bottom-color: #FECACA;
+}
+
+/* Patient List */
+.patient-list {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.patient-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: #F9FAFB;
+    border-radius: 8px;
+}
+
+.patient-info h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.patient-info p {
+    margin: 2px 0 0 0;
+    font-size: 12px;
+    color: #6B7280;
+}
+
+.patient-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.risk-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+}
+
+.risk-badge.high {
+    background-color: #DC2626;
+}
+
+.risk-badge.medium {
+    background-color: #111827;
+}
+
+/* Using dark for medium as per screenshot */
+.risk-badge.low {
+    background-color: #E5E7EB;
+    color: #374151;
+}
+
+.btn-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #111827;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Monitoring List */
+.monitoring-list {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.monitoring-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.monitoring-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.monitoring-info h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.monitoring-info p {
+    margin: 2px 0 0 0;
+    font-size: 12px;
+    color: #6B7280;
+}
+
+.status-badge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.status-badge.high {
+    background-color: #DC2626;
+    color: white;
+}
+
+.status-badge.medium {
+    background-color: #111827;
+    color: white;
+}
+
+.status-badge.low {
+    background-color: #E5E7EB;
+    color: #374151;
+}
+
+/* Quick Actions */
+.quick-actions h3 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #111827;
+}
+
+.actions-grid {
+    display: flex;
+    gap: 16px;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #E5E7EB;
+}
+
+.action-btn.primary {
+    background-color: #0F172A;
+    /* Dark blue/black */
+    color: white;
+    border: none;
+}
+
+.action-btn.secondary {
+    background-color: #FFFFFF;
+    color: #374151;
+}
+
+.action-btn span {
+    font-size: 18px;
+}
+
+.action-btn .plus {
+    font-size: 24px;
+    line-height: 18px;
+}

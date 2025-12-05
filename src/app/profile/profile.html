@@ -1,0 +1,113 @@
+<div class="dashboard-container">
+    <app-sidebar></app-sidebar>
+
+    <main class="main-content">
+        <header class="page-header">
+            <div class="header-text">
+                <h2>Mi Perfil</h2>
+                <p>Gestione su información personal y configuración de seguridad</p>
+            </div>
+        </header>
+
+        <!-- Personal Info Card -->
+        <div class="form-card">
+            <div class="card-header">
+                <span class="icon">👤</span> Información Personal
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <div class="readonly-field">{{ doctor.nombres }} {{ doctor.apellidos }} ({{ doctor.titulo }})</div>
+                </div>
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <div class="readonly-field">{{ doctor.usuario }}</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Especialidad</label>
+                <div class="readonly-field">{{ doctor.especialidad }}</div>
+            </div>
+
+            <p class="info-text">Para modificar estos datos, contacte al administrador del sistema.</p>
+        </div>
+
+        <!-- Change Password Card -->
+        <div class="form-card">
+            <div class="card-header">
+                <span class="icon">🔒</span> Cambiar Contraseña
+            </div>
+            
+            <form (ngSubmit)="updatePassword()">
+                <div class="form-group">
+                    <label for="currentPassword">Contraseña Actual *</label>
+                    <div class="password-input">
+                        <input [type]="visibility.current ? 'text' : 'password'" id="currentPassword" name="currentPassword" placeholder="Ingrese su contraseña actual" [(ngModel)]="passwords.current" required>
+                        <span class="eye-icon" (click)="toggleVisibility('current')">
+                            <!-- Gray Eye Icon (Outline) -->
+                            <svg *ngIf="!visibility.current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            <!-- Gray Eye Off Icon (Outline) -->
+                            <svg *ngIf="visibility.current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="newPassword">Nueva Contraseña *</label>
+                     <div class="password-input">
+                        <input [type]="visibility.new ? 'text' : 'password'" id="newPassword" name="newPassword" placeholder="Ingrese su nueva contraseña" [(ngModel)]="passwords.new" (input)="checkPasswordStrength()" required>
+                        <span class="eye-icon" (click)="toggleVisibility('new')">
+                            <svg *ngIf="!visibility.new" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            <svg *ngIf="visibility.new" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Password Requirements Checklist -->
+                <div class="password-requirements" *ngIf="passwords.new.length > 0" style="background-color: #f9fafb; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                    <h4 style="margin: 0 0 12px 0; color: #374151; font-size: 14px;">Requisitos de contraseña:</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px;">
+                        <li [style.color]="validation.length ? '#10B981' : '#9CA3AF'" style="margin-bottom: 4px; display: flex; align-items: center;">
+                            <span style="font-size: 10px; margin-right: 8px;">●</span> Al menos 8 caracteres
+                        </li>
+                         <li [style.color]="validation.upper ? '#10B981' : '#9CA3AF'" style="margin-bottom: 4px; display: flex; align-items: center;">
+                            <span style="font-size: 10px; margin-right: 8px;">●</span> Una letra mayúscula
+                        </li>
+                         <li [style.color]="validation.lower ? '#10B981' : '#9CA3AF'" style="margin-bottom: 4px; display: flex; align-items: center;">
+                            <span style="font-size: 10px; margin-right: 8px;">●</span> Una letra minúscula
+                        </li>
+                         <li [style.color]="validation.number ? '#10B981' : '#9CA3AF'" style="margin-bottom: 4px; display: flex; align-items: center;">
+                            <span style="font-size: 10px; margin-right: 8px;">●</span> Un número
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Nueva Contraseña *</label>
+                     <div class="password-input">
+                        <input [type]="visibility.confirm ? 'text' : 'password'" id="confirmPassword" name="confirmPassword" placeholder="Confirme su nueva contraseña" [(ngModel)]="passwords.confirm" required>
+                        <span class="eye-icon" (click)="toggleVisibility('confirm')">
+                            <svg *ngIf="!visibility.confirm" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                             <svg *ngIf="visibility.confirm" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                        </span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-update" [disabled]="!isFormValid || isLoading" [class.btn-enabled]="isFormValid && !isLoading">
+                    {{ isLoading ? 'Actualizando Contraseña...' : 'Actualizar Contraseña' }}
+                </button>
+            </form>
+        </div>
+
+        <!-- Float Toast -->
+        <div class="toast-notification" *ngIf="toast.show" [class.success]="toast.type === 'success'" [class.error]="toast.type === 'error'">
+            <div class="toast-icon">
+                <span *ngIf="toast.type === 'error'">❗</span>
+                <span *ngIf="toast.type === 'success'">✅</span>
+            </div>
+            <div class="toast-message">{{ toast.message }}</div>
+        </div>
+    </main>
+</div>
