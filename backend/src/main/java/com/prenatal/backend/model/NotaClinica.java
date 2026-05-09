@@ -7,14 +7,14 @@ import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "monitoreo")
+@Table(name = "notas_clinicas")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Monitoreo {
+public class NotaClinica {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idMonitoreo;
+    private Long idNota;
 
     @ManyToOne
     @JoinColumn(name = "id_medico", nullable = false)
@@ -24,18 +24,15 @@ public class Monitoreo {
     @JoinColumn(name = "id_paciente", nullable = false)
     private Paciente paciente;
 
-    private LocalDateTime fechaMonitoreo = LocalDateTime.now();
+    private LocalDateTime fechaNota;
 
-    private String nivelRiesgo; // Normal, Sospechoso, Patológico
+    @Column(columnDefinition = "TEXT")
+    private String contenido;
 
-    @Lob
-    @Column(columnDefinition = "BLOB")
-    private byte[] imagenCtg;
-
-    private String observaciones;
-
-    private Integer semanasGestacion;
-    private Integer frecuenciaCardiacaFetal;
-    private Integer movimientosFetales;
-    private Double porcentajeRiesgo;
+    @PrePersist
+    protected void onCreate() {
+        if (this.fechaNota == null) {
+            this.fechaNota = LocalDateTime.now();
+        }
+    }
 }

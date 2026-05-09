@@ -205,13 +205,12 @@
 }
 
 .risk-badge.medium {
-    background-color: #111827;
+    background-color: #F59E0B;
 }
 
-/* Using dark for medium as per screenshot */
 .risk-badge.low {
-    background-color: #E5E7EB;
-    color: #374151;
+    background-color: #10B981;
+    color: white;
 }
 
 .btn-icon {
@@ -275,13 +274,13 @@
 }
 
 .status-badge.medium {
-    background-color: #111827;
+    background-color: #F59E0B;
     color: white;
 }
 
 .status-badge.low {
-    background-color: #E5E7EB;
-    color: #374151;
+    background-color: #10B981;
+    color: white;
 }
 
 /* Quick Actions */

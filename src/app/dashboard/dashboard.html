@@ -18,28 +18,28 @@
             <div class="stat-card">
                 <div class="stat-info">
                     <span class="stat-label">Total Pacientes</span>
-                    <span class="stat-value">3</span>
+                    <span class="stat-value">{{ totalPacientes }}</span>
                 </div>
                 <div class="stat-icon blue">👥</div>
             </div>
             <div class="stat-card">
                 <div class="stat-info">
-                    <span class="stat-label">Riesgo Alto</span>
-                    <span class="stat-value error">1</span>
+                    <span class="stat-label">Riesgo Patológico</span>
+                    <span class="stat-value error">{{ riesgoPatologico }}</span>
                 </div>
                 <div class="stat-icon red">⚠️</div>
             </div>
             <div class="stat-card">
                 <div class="stat-info">
-                    <span class="stat-label">Riesgo Medio</span>
-                    <span class="stat-value warning">1</span>
+                    <span class="stat-label">Riesgo Sospechoso</span>
+                    <span class="stat-value warning">{{ riesgoSospechoso }}</span>
                 </div>
                 <div class="stat-icon yellow">↗️</div>
             </div>
             <div class="stat-card">
                 <div class="stat-info">
-                    <span class="stat-label">Riesgo Bajo</span>
-                    <span class="stat-value success">1</span>
+                    <span class="stat-label">Riesgo Normal</span>
+                    <span class="stat-value success">{{ riesgoNormal }}</span>
                 </div>
                 <div class="stat-icon green">📉</div>
             </div>
@@ -52,35 +52,18 @@
                      <span class="icon">⚠️</span> Pacientes de Mayor Riesgo
                 </div>
                 <div class="patient-list">
-                    <div class="patient-item">
+                    <div class="patient-item" *ngFor="let p of pacientesRiesgo">
                         <div class="patient-info">
-                            <h3>María González García</h3>
-                            <p>DNI: 12345678</p>
+                            <h3>{{ p.patient.nombres }} {{ p.patient.apellidos }}</h3>
+                            <p>DNI: {{ p.patient.dni }}</p>
                         </div>
                         <div class="patient-actions">
-                            <span class="risk-badge high">85%</span>
-                            <button class="btn-icon">+</button>
+                            <span class="risk-badge" [ngClass]="getRiskClass(p.latestRisk)">{{ p.riskPercent }}%</span>
+                            <button class="btn-icon" [routerLink]="['/patients', p.patient.idPaciente]">+</button>
                         </div>
                     </div>
-                    <div class="patient-item">
-                        <div class="patient-info">
-                            <h3>Carmen López Martín</h3>
-                            <p>DNI: 87654321</p>
-                        </div>
-                        <div class="patient-actions">
-                            <span class="risk-badge medium">55%</span>
-                            <button class="btn-icon">+</button>
-                        </div>
-                    </div>
-                    <div class="patient-item">
-                        <div class="patient-info">
-                            <h3>Ana Fernández Ruiz</h3>
-                            <p>DNI: 11223344</p>
-                        </div>
-                        <div class="patient-actions">
-                            <span class="risk-badge low">15%</span>
-                            <button class="btn-icon">+</button>
-                        </div>
+                    <div *ngIf="pacientesRiesgo.length === 0" style="padding: 15px; text-align: center; color: #6B7280; font-size: 14px;">
+                        No hay pacientes con riesgo registrado.
                     </div>
                 </div>
             </div>
@@ -91,51 +74,19 @@
                     <span class="icon">📉</span> Monitoreos Recientes
                 </div>
                  <div class="monitoring-list">
-                    <div class="monitoring-item">
+                    <div class="monitoring-item" *ngFor="let m of monitoreosRecientes" [routerLink]="['/patients', m.patientId]" style="cursor: pointer;">
                         <div class="monitoring-info">
-                            <h3>María González García</h3>
-                            <p>30/9/2024</p>
-                            <p>Línea base: 140 lpm</p>
+                            <h3>{{ m.patientName }}</h3>
+                            <p>{{ m.fechaMonitoreo | date:'shortDate' }}</p>
+                            <p>Registro de monitoreo</p>
                         </div>
-                        <span class="status-badge high">Alto</span>
+                        <span class="status-badge" [ngClass]="getRiskClass(m.nivelRiesgo)">{{ m.nivelRiesgo }}</span>
                     </div>
-                    <div class="monitoring-item">
-                        <div class="monitoring-info">
-                            <h3>Carmen López Martín</h3>
-                            <p>27/9/2024</p>
-                            <p>Línea base: 150 lpm</p>
-                        </div>
-                        <span class="status-badge medium">Medio</span>
-                    </div>
-                    <div class="monitoring-item">
-                        <div class="monitoring-info">
-                            <h3>Ana Fernández Ruiz</h3>
-                            <p>24/9/2024</p>
-                            <p>Línea base: 135 lpm</p>
-                        </div>
-                        <span class="status-badge low">Bajo</span>
+                    <div *ngIf="monitoreosRecientes.length === 0" style="padding: 15px; text-align: center; color: #6B7280; font-size: 14px;">
+                        No hay monitoreos registrados.
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-             <h3>Acciones Rápidas</h3>
-             <div class="actions-grid">
-                 <button class="action-btn primary">
-                     <span class="plus">+</span>
-                     Nueva Paciente
-                 </button>
-                 <button class="action-btn secondary">
-                     <span>📉</span>
-                     Nuevo Monitoreo
-                 </button>
-                 <button class="action-btn secondary">
-                     <span>👥</span>
-                     Ver Todas las Pacientes
-                 </button>
-             </div>
         </div>
 
     </main>

@@ -13,6 +13,14 @@ export interface Paciente {
     medico?: { idMedico: number };
 }
 
+export interface NotaClinica {
+    idNota?: number;
+    medico?: any;
+    paciente?: any;
+    fechaNota?: string | Date;
+    contenido: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -38,5 +46,21 @@ export class PatientService {
 
     updatePatient(id: number, patient: Paciente): Observable<Paciente> {
         return this.http.put<Paciente>(`${this.apiUrl}/${id}`, patient);
+    }
+
+    getNotasClinicas(patientId: number): Observable<NotaClinica[]> {
+        return this.http.get<NotaClinica[]>(`http://localhost:8080/api/notas/patient/${patientId}`);
+    }
+
+    createNotaClinica(nota: NotaClinica): Observable<NotaClinica> {
+        return this.http.post<NotaClinica>('http://localhost:8080/api/notas', nota);
+    }
+
+    updateNotaClinica(id: number, nota: NotaClinica): Observable<NotaClinica> {
+        return this.http.put<NotaClinica>(`http://localhost:8080/api/notas/${id}`, nota);
+    }
+
+    deleteNotaClinica(id: number): Observable<any> {
+        return this.http.delete(`http://localhost:8080/api/notas/${id}`);
     }
 }

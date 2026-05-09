@@ -22,7 +22,7 @@
             </div>
             
             <div class="header-actions">
-                 <button class="btn-pdf">📥 Exportar PDF</button>
+                 <button class="btn-pdf" (click)="exportarPDF()">📥 Exportar PDF</button>
                  <button class="btn-new-monitoring" [routerLink]="['/patients', patient.idPaciente, 'new-monitoring']">+ Nuevo Monitoreo</button>
             </div>
         </header>
@@ -84,40 +84,59 @@
             </div>
         </div>
 
-        <!-- Monitoring List Section -->
+        <!-- Historial de Riesgo & Notas Clínicas Section -->
         <div class="monitorings-section">
-            <div class="section-tabs">
-                <button class="tab active">Historial de Monitoreos</button>
+            <div class="section-tabs" style="display: flex; gap: 16px;">
+                <button class="tab" [class.active]="activeTab === 'riesgo'" (click)="setTab('riesgo')">Historial de Riesgo</button>
+                <button class="tab" [class.active]="activeTab === 'notas'" (click)="setTab('notas')">Notas Clínicas</button>
             </div>
 
-            <div class="monitoring-list">
-                <div class="monitoring-card" *ngFor="let mon of monitorings">
-                    <div class="monitoring-header">
-                        <div class="mon-left">
-                            <div class="mon-image-placeholder">
-                                <img *ngIf="mon.imagenCtg" [src]="'data:image/jpeg;base64,' + mon.imagenCtg" class="ctg-thumb">
-                                <span *ngIf="!mon.imagenCtg">Sin Imagen</span>
-                            </div>
-                            <div class="mon-info">
-                                <h3>{{ mon.fechaMonitoreo | date:'fullDate' | titlecase }}</h3>
-                                <p>Por: {{ mon.medico.titulo }} {{ mon.medico.nombres }} {{ mon.medico.apellidos }}</p>
-                            </div>
-                        </div>
-                         <span class="risk-badge-small" 
-                             [class.risk-high]="mon.nivelRiesgo === 'Patológico'"
-                             [class.risk-medium]="mon.nivelRiesgo === 'Sospechoso'"
-                             [class.risk-low]="mon.nivelRiesgo === 'Normal'">
-                            {{ mon.nivelRiesgo }}
-                        </span>
+            <!-- Tab: Riesgo -->
+            <div *ngIf="activeTab === 'riesgo'">
+                <div *ngIf="monitorings.length < 3" class="empty-state" style="text-align: center; padding: 32px; color: #6B7280; background: white; border-radius: 8px; border: 1px solid #e5e7eb; margin-top: 20px;">
+                    Se necesitan al menos 3 monitoreos para generar el historial gráfico de tendencias.
+                </div>
+                
+                <div [hidden]="monitorings.length < 3" style="padding: 20px; background: white; border-radius: 8px; border: 1px solid #e5e7eb; margin-top: 20px; position: relative; height: 350px;">
+                    <canvas id="riskChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Tab: Notas -->
+            <div *ngIf="activeTab === 'notas'">
+                <div class="notes-container" style="background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; padding: 24px; margin-top: 20px;">
+                    <div class="new-note-box" style="margin-bottom: 24px;">
+                        <textarea [(ngModel)]="nuevaNotaContenido" placeholder="Escribe una nueva nota clínica..." style="width: 100%; min-height: 100px; padding: 12px; border: 1px solid #E5E7EB; border-radius: 8px; resize: vertical; margin-bottom: 12px; font-family: inherit; box-sizing: border-box;"></textarea>
+                        <button (click)="agregarNota()" style="background: #111827; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">Guardar Nota</button>
                     </div>
                     
-                    <div class="mon-notes" *ngIf="mon.observaciones">
-                        <strong>Notas Clínicas:</strong>
-                        <p>{{ mon.observaciones }}</p>
+                    <div class="notes-list">
+                        <div *ngIf="notas.length === 0" style="text-align: center; color: #6B7280; padding: 20px;">
+                            No hay notas clínicas registradas.
+                        </div>
+                        <div class="note-item" *ngFor="let nota of notas" style="border-bottom: 1px solid #E5E7EB; padding-bottom: 16px; margin-bottom: 16px;">
+                            <div class="note-header" style="display: flex; justify-content: space-between; margin-bottom: 8px; align-items: center;">
+                                <div>
+                                    <strong style="color: #111827;">{{ nota.medico?.titulo }} {{ nota.medico?.nombres }} {{ nota.medico?.apellidos }}</strong>
+                                    <span style="color: #6B7280; font-size: 13px; margin-left: 8px; border-left: 1px solid #E5E7EB; padding-left: 8px;">{{ nota.fechaNota | date:'dd/MM/yyyy HH:mm' }}</span>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button (click)="iniciarEdicion(nota)" style="background: none; border: none; color: #2563EB; cursor: pointer; font-size: 13px; font-weight: 500; padding: 4px;">Editar</button>
+                                    <button (click)="eliminarNota(nota.idNota)" style="background: none; border: none; color: #DC2626; cursor: pointer; font-size: 13px; font-weight: 500; padding: 4px;">Eliminar</button>
+                                </div>
+                            </div>
+                            
+                            <div *ngIf="editingNoteId === nota.idNota" style="margin-top: 12px;">
+                                <textarea [(ngModel)]="editNotaContenido" style="width: 100%; min-height: 80px; padding: 10px; border: 1px solid #3B82F6; border-radius: 6px; margin-bottom: 8px; font-family: inherit; box-sizing: border-box;"></textarea>
+                                <div style="display: flex; gap: 8px;">
+                                    <button (click)="guardarEdicion(nota)" style="background: #2563EB; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Guardar</button>
+                                    <button (click)="cancelarEdicion()" style="background: #F3F4F6; color: #374151; border: 1px solid #E5E7EB; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Cancelar</button>
+                                </div>
+                            </div>
+                            
+                            <p *ngIf="editingNoteId !== nota.idNota" style="margin: 0; color: #374151; font-size: 14px; white-space: pre-wrap;">{{ nota.contenido }}</p>
+                        </div>
                     </div>
-                </div>
-                <div *ngIf="monitorings.length === 0" class="empty-state" style="text-align: center; padding: 32px; color: #6B7280;">
-                    No hay monitoreos registrados.
                 </div>
             </div>
         </div>
