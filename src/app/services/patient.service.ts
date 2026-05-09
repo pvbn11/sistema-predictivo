@@ -8,7 +8,7 @@ export interface Paciente {
     apellidos: string;
     dni: string;
     fechaNacimiento: string;
-    fechaProbableParto: string;
+    fechaProbableParto: string | null;
     fechaAltaPaciente?: string;
     medico?: { idMedico: number };
 }
@@ -34,5 +34,9 @@ export class PatientService {
 
     getMonitorings(patientId: number): Observable<any[]> {
         return this.http.get<any[]>(`http://localhost:8080/api/monitoreos/patient/${patientId}`);
+    }
+
+    updatePatient(id: number, patient: Paciente): Observable<Paciente> {
+        return this.http.put<Paciente>(`${this.apiUrl}/${id}`, patient);
     }
 }

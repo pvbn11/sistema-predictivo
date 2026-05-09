@@ -7,8 +7,8 @@
                 <span class="icon">←</span> Volver
             </a>
             <div class="header-text">
-                <h2>Nueva Paciente</h2>
-                <p>Registre los datos básicos de la nueva paciente</p>
+                <h2>{{ isEditing ? 'Editar Paciente' : 'Nueva Paciente' }}</h2>
+                <p>{{ isEditing ? 'Edite los datos básicos de la paciente' : 'Registre los datos básicos de la nueva paciente' }}</p>
             </div>
         </header>
 
@@ -34,7 +34,6 @@
                                [(ngModel)]="patient.apellidos" required #apellidos="ngModel"
                                [class.input-error]="(apellidos.invalid && (apellidos.dirty || apellidos.touched))">
                         <div *ngIf="(apellidos.invalid && (apellidos.dirty || apellidos.touched))" class="error-msg">
-                            Los apellidos son obligatorios
                         </div>
                     </div>
                 </div>
@@ -43,6 +42,7 @@
                     <label for="dni">DNI *</label>
                     <input type="text" id="dni" name="dni" placeholder="12345678" 
                            [(ngModel)]="patient.dni" required minlength="8" maxlength="8" pattern="\d*" #dni="ngModel"
+                           [disabled]="isEditing"
                            [class.input-error]="(dni.invalid && (dni.dirty || dni.touched)) || (formSubmitted && !patient.dni) || registerError">
                     
                     <div *ngIf="registerError" class="error-msg">{{ registerError }}</div>
@@ -78,7 +78,7 @@
 
                 <div class="form-actions">
                     <button type="button" class="btn-cancel" (click)="cancel()">Cancelar</button>
-                    <button type="submit" class="btn-save">Guardar Paciente</button>
+                    <button type="submit" class="btn-save">{{ isEditing ? 'Editar Paciente' : 'Guardar Paciente' }}</button>
                 </div>
             </form>
         </div>

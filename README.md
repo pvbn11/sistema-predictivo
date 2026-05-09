@@ -1,59 +1,51 @@
-# SistemaPrenatal
+# Sistema Predictivo (Prenatal)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.2.
+Este documento contiene los pasos necesarios para levantar el entorno de desarrollo del proyecto, incluyendo tanto el Frontend (Angular) como el Backend (Spring Boot).
 
-## Development server
+## 🚀 Requisitos Previos
 
-To start a local development server, run:
+- [Node.js](https://nodejs.org/) (incluye `npm`)
+- [Java Development Kit (JDK)](https://www.oracle.com/java/technologies/downloads/) (versión 17 o superior recomendada)
 
-```bash
-ng serve
-```
+---
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 💻 Frontend (Angular)
 
-## Code scaffolding
+El Frontend está ubicado en la raíz del proyecto y utiliza Angular.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+**Pasos para ejecutarlo:**
 
-```bash
-ng generate component component-name
-```
+1. Abre una terminal en la carpeta raíz del proyecto.
+2. Instala las dependencias del proyecto (solo la primera vez):
+   ```bash
+   npm install
+   ```
+3. Inicia el servidor de desarrollo:
+   ```bash
+   npm start
+   ```
+   *(También puedes usar `npx ng serve` o `npm run start`)*
+4. Abre tu navegador y ve a la dirección: **http://localhost:4200/**. La aplicación se recargará automáticamente si realizas cambios en el código.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## ⚙️ Backend (Spring Boot)
 
-## Building
+El Backend está desarrollado con Java y Spring Boot, y se encuentra dentro de la carpeta `backend/`.
 
-To build the project run:
+**Pasos para ejecutarlo:**
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+1. Abre una nueva terminal y navega hacia la carpeta `backend`:
+   ```bash
+   cd backend
+   ```
+2. Inicia la aplicación utilizando el wrapper de Maven incluido en el proyecto:
+   - **En Windows:**
+     ```cmd
+     .\mvnw spring-boot:run
+     ```
+   - **En Linux o macOS:**
+     ```bash
+     ./mvnw spring-boot:run
+     ```
+3. El servidor Backend se iniciará y estará disponible por defecto en: **http://localhost:8080/**.

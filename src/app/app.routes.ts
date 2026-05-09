@@ -11,6 +11,7 @@ export const routes: Routes = [
     { path: '', component: LoginComponent },
     { path: 'dashboard', component: Dashboard },
     { path: 'patients', component: Patients },
+    { path: 'patients/:id/edit', component: NewPatient },
     { path: 'patients/:id', component: PatientDetails },
     { path: 'patients/:id/new-monitoring', component: NewMonitoringComponent },
     { path: 'new-patient', component: NewPatient },

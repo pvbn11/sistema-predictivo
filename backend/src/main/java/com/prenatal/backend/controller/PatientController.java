@@ -55,4 +55,19 @@ public class PatientController {
             return ResponseEntity.badRequest().body("Error al guardar paciente: " + e.getMessage());
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePatient(@PathVariable Long id, @RequestBody Paciente patientDetails) {
+        return pacienteRepository.findById(id).map(patient -> {
+            patient.setNombres(patientDetails.getNombres());
+            patient.setApellidos(patientDetails.getApellidos());
+            patient.setFechaNacimiento(patientDetails.getFechaNacimiento());
+            patient.setFechaProbableParto(patientDetails.getFechaProbableParto());
+
+            // Should we update Medico? Not requested, so leaving as is.
+
+            Paciente updatedPatient = pacienteRepository.save(patient);
+            return ResponseEntity.ok(updatedPatient);
+        }).orElse(ResponseEntity.notFound().build());
+    }
 }

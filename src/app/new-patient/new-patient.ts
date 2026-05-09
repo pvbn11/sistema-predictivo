@@ -1,7 +1,7 @@
-import { Component, inject, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { Sidebar } from '../sidebar/sidebar';
 import { PatientService, Paciente } from '../services/patient.service';
 import { AuthService } from '../services/auth.service';
@@ -12,7 +12,7 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './new-patient.html',
   styleUrl: './new-patient.css',
 })
-export class NewPatient {
+export class NewPatient implements OnInit {
   patient: Paciente = {
     nombres: '',
     apellidos: '',
@@ -23,13 +23,41 @@ export class NewPatient {
 
   registerError: string | null = null;
   formSubmitted = false;
+  isEditing = false;
+  patientId?: number;
 
   @ViewChild('patientForm') patientForm!: NgForm;
 
   private patientService = inject(PatientService);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
+
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.isEditing = true;
+        this.patientId = +id;
+        this.loadPatient(this.patientId);
+      }
+    });
+  }
+
+  loadPatient(id: number) {
+    this.patientService.getPatientById(id).subscribe({
+      next: (data) => {
+        this.patient = data;
+        this.cdr.detectChanges(); // Force view update to show preloaded data
+      },
+      error: (err) => {
+        console.error('Error loading patient for edit', err);
+        alert('Error al cargar datos del paciente');
+        this.router.navigate(['/patients']);
+      }
+    });
+  }
 
   get calculatedAge(): number | null {
     if (!this.patient.fechaNacimiento) return null;
@@ -75,21 +103,40 @@ export class NewPatient {
       this.patient.medico = { idMedico: currentUser.idMedico };
     }
 
-    this.patientService.createPatient(this.patient).subscribe({
-      next: () => {
-        alert('Paciente registrada exitosamente');
-        this.router.navigate(['/patients']);
-      },
-      error: (err) => {
-        console.error(err);
-        if (err.status === 409) {
-          this.registerError = 'Ya existe una paciente registrada con este DNI';
-          this.cdr.detectChanges(); // Force update
-        } else {
-          alert('Error al registrar paciente: ' + (err.error || 'Error desconocido'));
+    // Prepare payload
+    const payload = { ...this.patient };
+    if (!payload.fechaProbableParto) {
+      payload.fechaProbableParto = null;
+    }
+
+    if (this.isEditing && this.patientId) {
+      this.patientService.updatePatient(this.patientId, payload).subscribe({
+        next: () => {
+          alert('Paciente editada exitosamente');
+          this.router.navigate(['/patients']);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Error al editar paciente: ' + (err.error || 'Error desconocido'));
         }
-      }
-    });
+      });
+    } else {
+      this.patientService.createPatient(payload).subscribe({
+        next: () => {
+          alert('Paciente registrada exitosamente');
+          this.router.navigate(['/patients']);
+        },
+        error: (err) => {
+          console.error(err);
+          if (err.status === 409) {
+            this.registerError = 'Ya existe una paciente registrada con este DNI';
+            this.cdr.detectChanges(); // Force update
+          } else {
+            alert('Error al registrar paciente: ' + (err.error || 'Error desconocido'));
+          }
+        }
+      });
+    }
   }
 
   cancel() {
