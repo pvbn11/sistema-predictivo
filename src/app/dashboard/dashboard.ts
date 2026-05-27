@@ -17,9 +17,8 @@ export class Dashboard implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   totalPacientes = 0;
-  riesgoPatologico = 0;
-  riesgoSospechoso = 0;
-  riesgoNormal = 0;
+  riesgoAlterado = 0;
+  riesgoOptimo = 0;
 
   pacientesRiesgo: any[] = [];
   monitoreosRecientes: any[] = [];
@@ -50,27 +49,28 @@ export class Dashboard implements OnInit {
             
             allMonitorings.push(...monitorings.map((m: any) => {
                let nR = m.nivelRiesgo;
-               if (nR === 'Alto') nR = 'Patológico';
-               if (nR === 'Medio') nR = 'Sospechoso';
-               if (nR === 'Bajo') nR = 'Normal';
+               if (nR === 'Alto' || nR === 'Medio' || nR === 'Patológico' || nR === 'Sospechoso' || nR === 'Alterado') {
+                  nR = 'Alterado';
+               } else {
+                  nR = 'Óptimo';
+               }
                return { ...m, nivelRiesgo: nR, patientName: p.nombres + ' ' + p.apellidos, patientId: p.idPaciente };
             }));
 
             let riskLevel = latest.nivelRiesgo;
-            if (riskLevel === 'Alto') riskLevel = 'Patológico';
-            if (riskLevel === 'Medio') riskLevel = 'Sospechoso';
-            if (riskLevel === 'Bajo') riskLevel = 'Normal';
+            if (riskLevel === 'Alto' || riskLevel === 'Medio' || riskLevel === 'Patológico' || riskLevel === 'Sospechoso' || riskLevel === 'Alterado') {
+               riskLevel = 'Alterado';
+            } else {
+               riskLevel = 'Óptimo';
+            }
 
             let percent = latest.porcentajeRiesgo;
             
-            if (riskLevel === 'Patológico') {
-               this.riesgoPatologico++;
-               if (!percent) percent = 85;
-            } else if (riskLevel === 'Sospechoso') {
-               this.riesgoSospechoso++;
-               if (!percent) percent = 50;
+            if (riskLevel === 'Alterado') {
+               this.riesgoAlterado++;
+               if (!percent) percent = 70;
             } else {
-               this.riesgoNormal++;
+               this.riesgoOptimo++;
                if (!percent) percent = 15;
             }
 
@@ -96,8 +96,9 @@ export class Dashboard implements OnInit {
   }
 
   getRiskClass(nivel: string) {
-      if (nivel === 'Alto' || nivel === 'Patológico') return 'high';
-      if (nivel === 'Medio' || nivel === 'Sospechoso') return 'medium';
+      if (nivel === 'Alto' || nivel === 'Patológico' || nivel === 'Medio' || nivel === 'Sospechoso' || nivel === 'Alterado') {
+          return 'high';
+      }
       return 'low';
   }
 }

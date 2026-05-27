@@ -72,7 +72,7 @@ public class DataInitializer {
                     mon.setMedico(medico);
                     mon.setPaciente(maria);
                     mon.setFechaMonitoreo(LocalDateTime.now().minusDays(2));
-                    mon.setNivelRiesgo("Patológico");
+                    mon.setNivelRiesgo("Alterado");
                     mon.setObservaciones("Patrón reactivo, continuar seguimiento.");
                     mon.setImagenCtg(imgBytes);
 

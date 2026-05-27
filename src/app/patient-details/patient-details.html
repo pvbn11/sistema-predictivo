@@ -72,9 +72,8 @@
                  <div class="card-row">
                     <span class="label">Nivel de Riesgo</span>
                     <span *ngIf="monitorings.length > 0" class="risk-badge" 
-                        [class.risk-high]="monitorings[0]?.nivelRiesgo === 'Alto' || monitorings[0]?.nivelRiesgo === 'Patológico'"
-                        [class.risk-medium]="monitorings[0]?.nivelRiesgo === 'Medio' || monitorings[0]?.nivelRiesgo === 'Sospechoso'"
-                        [class.risk-low]="monitorings[0]?.nivelRiesgo === 'Bajo' || monitorings[0]?.nivelRiesgo === 'Normal'">
+                        [class.risk-high]="monitorings[0]?.nivelRiesgo === 'Alterado' || monitorings[0]?.nivelRiesgo === 'Alto' || monitorings[0]?.nivelRiesgo === 'Patológico' || monitorings[0]?.nivelRiesgo === 'Medio' || monitorings[0]?.nivelRiesgo === 'Sospechoso'"
+                        [class.risk-low]="monitorings[0]?.nivelRiesgo === 'Óptimo' || monitorings[0]?.nivelRiesgo === 'Normal' || monitorings[0]?.nivelRiesgo === 'Bajo'">
                         {{ monitorings[0]?.nivelRiesgo }}
                     </span>
                     <span *ngIf="monitorings.length === 0" class="value" style="font-weight: normal; color: #6B7280;">

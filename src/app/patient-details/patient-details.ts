@@ -68,9 +68,11 @@ export class PatientDetails {
                 console.log('Monitorings loaded:', data);
                 this.monitorings = data.map((m: any) => {
                     let nR = m.nivelRiesgo;
-                    if (nR === 'Alto') nR = 'Patológico';
-                    if (nR === 'Medio') nR = 'Sospechoso';
-                    if (nR === 'Bajo') nR = 'Normal';
+                    if (nR === 'Alto' || nR === 'Medio' || nR === 'Patológico' || nR === 'Sospechoso' || nR === 'Alterado') {
+                        nR = 'Alterado';
+                    } else {
+                        nR = 'Óptimo';
+                    }
                     return { ...m, nivelRiesgo: nR };
                 });
                 
@@ -229,8 +231,9 @@ export class PatientDetails {
         const dataPoints = sortedMonitorings.map(m => {
             // Si no hay porcentaje, calcular uno ficticio en base al nivel
             if (m.porcentajeRiesgo !== undefined) return m.porcentajeRiesgo;
-            if (m.nivelRiesgo === 'Patológico' || m.nivelRiesgo === 'Alto') return Math.floor(Math.random() * 20) + 80;
-            if (m.nivelRiesgo === 'Sospechoso' || m.nivelRiesgo === 'Medio') return Math.floor(Math.random() * 30) + 40;
+            if (m.nivelRiesgo === 'Alterado' || m.nivelRiesgo === 'Patológico' || m.nivelRiesgo === 'Alto' || m.nivelRiesgo === 'Sospechoso' || m.nivelRiesgo === 'Medio') {
+                return Math.floor(Math.random() * 30) + 60;
+            }
             return Math.floor(Math.random() * 30) + 10;
         });
         
@@ -329,10 +332,40 @@ export class PatientDetails {
             doc.text(`Fecha: ${new Date(ultimo.fechaMonitoreo).toLocaleString()}`, 20, currentY);
             currentY += 8;
             doc.text(`Nivel de Riesgo: ${ultimo.nivelRiesgo}`, 20, currentY);
+            let semanasGestacionVal = 'N/A';
+            if (this.patient && this.patient.fechaProbableParto) {
+                const fppRaw = this.patient.fechaProbableParto;
+                let fppDate: Date | null = null;
+                
+                if (Array.isArray(fppRaw)) {
+                    fppDate = new Date(fppRaw[0], fppRaw[1] - 1, fppRaw[2]);
+                } else if (typeof fppRaw === 'string') {
+                    if (fppRaw.includes('-')) {
+                        const parts = fppRaw.split('-');
+                        fppDate = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+                    } else {
+                        fppDate = new Date(fppRaw);
+                    }
+                }
+                
+                if (fppDate && !isNaN(fppDate.getTime())) {
+                    const currentDate = new Date();
+                    const d2Midnight = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+                    
+                    const diffTime = fppDate.getTime() - d2Midnight.getTime();
+                    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+                    const weeks = 40 - (diffDays / 7);
+                    const weeksInt = Math.floor(weeks);
+                    semanasGestacionVal = weeksInt >= 0 ? weeksInt.toString() : '0';
+                }
+            } else if (ultimo.semanasGestacion) {
+                semanasGestacionVal = ultimo.semanasGestacion.toString();
+            }
+
             currentY += 8;
-            doc.text(`Semanas de Gestación: ${ultimo.semanasGestacion || 'N/A'}`, 20, currentY);
+            doc.text(`Semanas de Gestación: ${semanasGestacionVal}`, 20, currentY);
             currentY += 8;
-            doc.text(`LPM: ${ultimo.frecuenciaCardiacaFetal || 'N/A'} | Movimientos: ${ultimo.movimientosFetales || 'N/A'}`, 20, currentY);
+            doc.text(`Porcentaje de Riesgo: ${ultimo.porcentajeRiesgo !== undefined && ultimo.porcentajeRiesgo !== null ? ultimo.porcentajeRiesgo : 'N/A'}%`, 20, currentY);
             currentY += 15;
         } else {
             doc.text('No hay monitoreos registrados.', 20, currentY);

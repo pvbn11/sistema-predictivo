@@ -7,106 +7,277 @@
     </div>
 
     <main class="main-content">
-        <header class="page-header" *ngIf="patient">
+        <!-- Header for Form and Loading states -->
+        <header class="page-header" *ngIf="patient && viewState !== 'result'">
             <button (click)="onCancel()" class="btn-back">
                 <span class="icon">←</span> Volver
             </button>
             <div class="header-text">
-                <h2>Nuevo Monitoreo</h2>
+                <h2>{{ viewState === 'form' ? 'Nuevo Monitoreo' : 'Análisis Predictivo' }}</h2>
                 <p>Paciente: {{ patient.nombres }} {{ patient.apellidos }}</p>
             </div>
         </header>
 
-        <div class="content-grid" *ngIf="patient">
-            <!-- Left Info Panel -->
-            <div class="info-panel">
-                <div class="panel-header">Información de la Paciente</div>
-                <div class="info-content">
-                    <div class="info-item">
-                        <label>Nombre</label>
-                        <div class="value">{{ patient.nombres }} {{ patient.apellidos }}</div>
+        <!-- Header for Result state -->
+        <header class="page-header predictive-header-result" *ngIf="patient && viewState === 'result'">
+            <div class="header-left-side">
+                <button (click)="onCancel()" class="btn-back">
+                    <span class="icon">←</span> Volver
+                </button>
+                <div class="header-text">
+                    <h2>Análisis Predictivo</h2>
+                    <p>Paciente: {{ patient.nombres }} {{ patient.apellidos }}</p>
+                </div>
+            </div>
+            <div class="header-toast-badge">
+                <span class="icon-circle-check-black">✔</span> Análisis completado
+            </div>
+        </header>
+
+        <!-- 1. Form View State -->
+        <ng-container *ngIf="viewState === 'form'">
+            <div class="content-grid" *ngIf="patient">
+                <!-- Left Info Panel -->
+                <div class="info-panel">
+                    <div class="panel-header">Información de la Paciente</div>
+                    <div class="info-content">
+                        <div class="info-item">
+                            <label>Nombre</label>
+                            <div class="value">{{ patient.nombres }} {{ patient.apellidos }}</div>
+                        </div>
+                        <div class="info-item">
+                            <label>DNI</label>
+                            <div class="value">{{ patient.dni }}</div>
+                        </div>
+                        <div class="info-item">
+                            <label>Edad</label>
+                            <div class="value">{{ calculateAge(patient.fechaNacimiento) }} años</div>
+                        </div>
+                        <div class="info-item">
+                            <label>FPP</label>
+                            <div class="value">{{ patient.fechaProbableParto | date:'dd/MM/yyyy' }}</div>
+                        </div>
+                        <div class="info-item">
+                            <label>Fecha del Monitoreo</label>
+                            <div class="value">{{ todayDate | date:'dd/MM/yyyy' }}</div>
+                        </div>
                     </div>
-                    <div class="info-item">
-                        <label>DNI</label>
-                        <div class="value">{{ patient.dni }}</div>
+                </div>
+
+                <!-- Right Upload Panel -->
+                <div class="upload-panel">
+                    <!-- Scale Section -->
+                    <div class="scale-section">
+                        <div class="panel-header scale-header">
+                            <span class="icon">📏</span> Escala del Papel de Trazado
+                        </div>
+                        <div class="scale-inputs">
+                            <div class="input-group">
+                                <label for="escalaX">Escala X (cm/min) <span class="required">*</span></label>
+                                <input type="number" 
+                                       id="escalaX" 
+                                       name="escalaX" 
+                                       [(ngModel)]="escalaX" 
+                                       (keydown)="preventNonInteger($event)"
+                                       (paste)="preventNonIntegerPaste($event)"
+                                       placeholder="Ej. 1" 
+                                       min="1" 
+                                       max="3"
+                                       step="1" 
+                                       required 
+                                       class="form-input"
+                                       [class.input-error]="isFieldInvalid('escalaX')">
+                                <span class="error-text" *ngIf="isFieldInvalid('escalaX')">
+                                    Solo se permiten los valores 1, 2 o 3.
+                                </span>
+                            </div>
+                            <div class="input-group">
+                                <label for="escalaY">Escala Y (lpm) <span class="required">*</span></label>
+                                <input type="number" 
+                                       id="escalaY" 
+                                       name="escalaY" 
+                                       [(ngModel)]="escalaY" 
+                                       (keydown)="preventNonInteger($event)"
+                                       (paste)="preventNonIntegerPaste($event)"
+                                       placeholder="Ej. 20" 
+                                       min="1" 
+                                       step="1" 
+                                       required 
+                                       class="form-input"
+                                       [class.input-error]="isFieldInvalid('escalaY')">
+                                <span class="error-text" *ngIf="isFieldInvalid('escalaY')">
+                                    Debe ser un número entero mayor a 0
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="info-item">
-                        <label>Edad</label>
-                        <div class="value">{{ calculateAge(patient.fechaNacimiento) }} años</div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="panel-header">
+                        <span class="icon">🖼️</span> Carga de Imagen CTG
                     </div>
-                    <div class="info-item">
-                        <label>FPP</label>
-                        <div class="value">{{ patient.fechaProbableParto | date:'dd/MM/yyyy' }}</div>
+
+                    <!-- 1. Drop Zone (Hidden if file uploaded) -->
+                    <div class="drop-zone" (dragover)="onDragOver($event)" (drop)="onDrop($event)" *ngIf="!uploadedFile">
+                        <div class="upload-icon">↑</div>
+                        <div class="upload-text">
+                            <h3>Arrastre y suelte la imagen del trazado CTG</h3>
+                            <p>o haga clic para seleccionar un archivo</p>
+                        </div>
+                        
+                        <input type="file" #fileInput (change)="onFileSelected($event)" accept=".jpg, .jpeg" style="display: none;">
+                        <button class="btn-select-file" (click)="fileInput.click()">Seleccionar Archivo</button>
+                        
+                        <p class="upload-hint">Solo archivos JPG. Tamaño máximo: 10MB</p>
                     </div>
-                    <div class="info-item">
-                        <label>Fecha del Monitoreo</label>
-                        <div class="value">{{ todayDate | date:'d/MM/yyyy' }}</div>
+
+                    <!-- 2. Preview (Shown if file uploaded) -->
+                    <div class="preview-zone" *ngIf="uploadedFile && uploadedFileUrl">
+                        <img [src]="uploadedFileUrl" alt="CTG Preview" class="ctg-preview">
+                        <button class="btn-remove" (click)="removeFile()" [disabled]="isSaving">✖</button>
+                    </div>
+
+                    <!-- 3. Success Message -->
+                    <div class="success-box" *ngIf="uploadedFile">
+                        <div class="success-title">
+                            <span class="icon">✅</span> Imagen cargada correctamente.
+                        </div>
+                        <p>El sistema procesará automáticamente el trazado CTG al hacer clic en "Guardar y Analizar".</p>
+                    </div>
+
+                    <!-- 4. File Info Box -->
+                    <div class="file-info-box" *ngIf="uploadedFile">
+                        <div><strong>Archivo:</strong> {{ selectedFileName }}</div>
+                        <div><strong>Tamaño:</strong> {{ formatFileSize(uploadedFile.size) }}</div>
+                    </div>
+
+                    <!-- 5. Important Info -->
+                    <div class="info-box">
+                        <div class="info-title">⚠️ Importante:</div>
+                        <p>Asegúrese de que la imagen del trazado CTG sea clara y completa para obtener una extracción precisa de los parámetros.</p>
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn-cancel" (click)="onCancel()" [disabled]="isSaving">Cancelar</button>
+                        <button class="btn-save" 
+                                (click)="onSave()" 
+                                [disabled]="isSaveDisabled()" 
+                                [class.btn-black]="!isSaveDisabled()">
+                            {{ isSaving ? 'Procesando IA...' : 'Guardar y Analizar' }}
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Upload Panel -->
-            <div class="upload-panel">
-                <div class="panel-header">
-                    <span class="icon">🖼️</span> Carga de Imagen CTG
-                </div>
+            <!-- Process Description (Bottom) -->
+            <div class="process-desc">
+                <h4>Proceso de análisis:</h4>
+                <ol>
+                    <li>Suba la imagen del trazado de cardiotocografía (CTG) en formato JPG</li>
+                    <li>El sistema extraerá automáticamente los parámetros clave (línea de base, variabilidad, etc.)</li>
+                    <li>Se ejecutará el modelo predictivo para calcular el nivel de riesgo</li>
+                    <li>Podrá revisar los resultados y agregar notas clínicas</li>
+                </ol>
+            </div>
+        </ng-container>
 
-                <!-- 1. Drop Zone (Hidden if file uploaded) -->
-                <div class="drop-zone" (dragover)="onDragOver($event)" (drop)="onDrop($event)" *ngIf="!uploadedFile">
-                    <div class="upload-icon">↑</div>
-                    <div class="upload-text">
-                        <h3>Arrastre y suelte la imagen del trazado CTG</h3>
-                        <p>o haga clic para seleccionar un archivo</p>
+        <!-- 2. Loading View State -->
+        <div class="predictive-card-wrapper" *ngIf="viewState === 'loading' && patient">
+            <div class="predictive-card loading-card">
+                <div class="card-top-header">
+                    <div class="spinner-container">
+                        <span class="spinner-icon"></span>
                     </div>
-                    
-                    <input type="file" #fileInput (change)="onFileSelected($event)" accept=".jpg, .jpeg" style="display: none;">
-                    <button class="btn-select-file" (click)="fileInput.click()">Seleccionar Archivo</button>
-                    
-                    <p class="upload-hint">Solo archivos JPG. Tamaño máximo: 10MB</p>
+                    <span class="card-top-title">Procesando Análisis</span>
                 </div>
-
-                <!-- 2. Preview (Shown if file uploaded) -->
-                <div class="preview-zone" *ngIf="uploadedFile && uploadedFileUrl">
-                    <img [src]="uploadedFileUrl" alt="CTG Preview" class="ctg-preview">
-                    <button class="btn-remove" (click)="removeFile()">✖</button>
-                </div>
-
-                <!-- 3. Success Message -->
-                <div class="success-box" *ngIf="uploadedFile">
-                    <div class="success-title">
-                        <span class="icon">✅</span> Imagen cargada correctamente.
+                
+                <div class="loading-center-content">
+                    <div class="heartbeat-container">
+                        <svg class="heartbeat-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60">
+                            <path d="M10,30 L30,30 L36,15 L44,45 L50,22 L56,38 L62,30 L90,30" fill="none" stroke="#2563EB" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
                     </div>
-                    <p>El sistema procesará automáticamente el trazado CTG al hacer clic en "Guardar y Analizar".</p>
-                </div>
-
-                <!-- 4. File Info Box -->
-                <div class="file-info-box" *ngIf="uploadedFile">
-                    <div><strong>Archivo:</strong> {{ selectedFileName }}</div>
-                    <div><strong>Tamaño:</strong> {{ formatFileSize(uploadedFile.size) }}</div>
-                </div>
-
-                <!-- 5. Important Info -->
-                <div class="info-box">
-                    <div class="info-title">⚠️ Importante:</div>
-                    <p>Asegúrese de que la imagen del trazado CTG sea clara y completa para obtener una extracción precisa de los parámetros.</p>
-                </div>
-
-                <div class="actions">
-                    <button class="btn-cancel" (click)="onCancel()">Cancelar</button>
-                    <button class="btn-save" (click)="onSave()" [class.btn-black]="uploadedFile">Guardar y Analizar</button>
+                    <p class="loading-status-text">Analizando imagen y calculando riesgo...</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" [style.width.%]="progressValue"></div>
+                    </div>
+                    <p class="progress-percentage-text">{{ progressValue }}% completado</p>
                 </div>
             </div>
         </div>
 
-        <!-- Process Description (Bottom) -->
-        <div class="process-desc">
-            <h4>Proceso de análisis:</h4>
-            <ol>
-                <li>Suba la imagen del trazado de cardiotocografía (CTG) en formato JPG</li>
-                <li>El sistema extraerá automáticamente los parámetros clave (línea de base, variabilidad, etc.)</li>
-                <li>Se ejecutará el modelo predictivo para calcular el nivel de riesgo</li>
-                <li>Podrá revisar los resultados y agregar notas clínicas</li>
-            </ol>
+        <!-- 3. Result View State -->
+        <div class="predictive-card-wrapper" *ngIf="viewState === 'result' && patient">
+            <div class="predictive-card result-card">
+                <div class="card-top-header result-card-header">
+                    <span class="icon-circle-check-green">✔</span>
+                    <span class="card-top-title">Resultado del Análisis</span>
+                </div>
+                
+                <div class="result-columns-layout">
+                    <!-- Left Column -->
+                    <div class="result-column-left">
+                        <div class="risk-percentage-display" [class.risk-optimal]="riskResult?.nivelRiesgo === 'Óptimo'" [class.risk-altered]="riskResult?.nivelRiesgo === 'Alterado'">
+                            {{ riskResult?.porcentajeRiesgo | number:'1.0-0' }}%
+                        </div>
+                        
+                        <div class="risk-badge" [class.badge-optimal]="riskResult?.nivelRiesgo === 'Óptimo'" [class.badge-altered]="riskResult?.nivelRiesgo === 'Alterado'">
+                            {{ riskResult?.nivelRiesgo === 'Óptimo' ? 'Riesgo Bajo' : 'Riesgo Alto' }}
+                        </div>
+                        
+                        <!-- Alert Recommendation -->
+                        <div class="clinical-recommendation-alert" [class.alert-optimal]="riskResult?.nivelRiesgo === 'Óptimo'" [class.alert-altered]="riskResult?.nivelRiesgo === 'Alterado'">
+                            <div class="recommendation-header">
+                                <span class="alert-icon">{{ riskResult?.nivelRiesgo === 'Óptimo' ? '✔' : '⚠' }}</span>
+                                <span class="recommendation-title">
+                                    <strong>Bienestar Fetal {{ riskResult?.nivelRiesgo === 'Óptimo' ? 'Óptimo' : 'Alterado' }}:</strong> 
+                                    {{ riskResult?.nivelRiesgo === 'Óptimo' ? 'Continuar seguimiento de rutina.' : 'Se necesita seguimiento al paciente.' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div class="result-column-right">
+                        <!-- Sub-card: Patient Info -->
+                        <div class="result-sub-card">
+                            <div class="sub-card-header">Información de la Paciente</div>
+                            <div class="patient-info-grid">
+                                <div class="info-grid-item">
+                                    <div class="grid-label">Nombre:</div>
+                                    <div class="grid-value">{{ patient.nombres }} {{ patient.apellidos }}</div>
+                                </div>
+                                <div class="info-grid-item">
+                                    <div class="grid-label">Edad:</div>
+                                    <div class="grid-value">{{ calculateAge(patient.fechaNacimiento) }} años</div>
+                                </div>
+                                <div class="info-grid-item">
+                                    <div class="grid-label">DNI:</div>
+                                    <div class="grid-value">{{ patient.dni }}</div>
+                                </div>
+                                <div class="info-grid-item">
+                                    <div class="grid-label">Fecha:</div>
+                                    <div class="grid-value">{{ todayDate | date:'dd/MM/yyyy' }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Sub-card: CTG Image -->
+                        <div class="result-sub-card image-sub-card">
+                            <div class="sub-card-header">Imagen CTG Analizada</div>
+                            <div class="analyzed-image-container" (click)="openImageInNewTab()">
+                                <img [src]="uploadedFileUrl" alt="Analyzed CTG" class="analyzed-ctg-image">
+                            </div>
+                            <div class="image-hint-text">Click en la imagen para ver en tamaño completo</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-actions-footer">
+                    <button class="btn-finalize-back" (click)="finishAndGoBack()">Finalizar y Volver al Historial</button>
+                </div>
+            </div>
         </div>
     </main>
 </div>

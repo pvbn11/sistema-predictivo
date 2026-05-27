@@ -26,7 +26,7 @@ public class Monitoreo {
 
     private LocalDateTime fechaMonitoreo = LocalDateTime.now();
 
-    private String nivelRiesgo; // Normal, Sospechoso, Patológico
+    private String nivelRiesgo; // Óptimo, Alterado
 
     @Lob
     @Column(columnDefinition = "BLOB")
@@ -37,5 +37,7 @@ public class Monitoreo {
     private Integer semanasGestacion;
     private Integer frecuenciaCardiacaFetal;
     private Integer movimientosFetales;
-    private Double porcentajeRiesgo;
+
+    @Column(name = "porcentaje_riesgo", precision = 10, scale = 2)
+    private java.math.BigDecimal porcentajeRiesgo;
 }

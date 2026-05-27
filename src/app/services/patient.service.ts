@@ -63,4 +63,8 @@ export class PatientService {
     deleteNotaClinica(id: number): Observable<any> {
         return this.http.delete(`http://localhost:8080/api/notas/${id}`);
     }
+
+    uploadMonitoreo(formData: FormData): Observable<any> {
+        return this.http.post<any>(`http://localhost:8080/api/monitoreos/predict`, formData);
+    }
 }

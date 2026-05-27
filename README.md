@@ -1,8 +1,17 @@
-# Sistema Predictivo (Prenatal)
+# Sistema Predictivo Prenatal
 
-Este documento contiene los pasos necesarios para levantar el entorno de desarrollo del proyecto, incluyendo tanto el Frontend (Angular) como el Backend (Spring Boot).
+Este proyecto contiene el Frontend en Angular y el Backend en Spring Boot para la predicción de Riesgos en CTG.
 
-## 🚀 Requisitos Previos
+## Requisitos Previos
+
+*   **Java**: 21
+*   **Node.js**: v18 o superior
+*   **Angular CLI**: v17 o superior
+*   **Python**: **3.11 o 3.12** (Versiones requeridas obligatoriamente, ya que TensorFlow/Keras no es compatible con Python 3.13+ actualmente).
+    *   Debe tener instaladas las dependencias ejecutando: `pip install tensorflow numpy Pillow`
+*   **Base de datos**: H2 (Embebida, no requiere configuración adicional)
+
+## Estructura del Proyectos
 
 - [Node.js](https://nodejs.org/) (incluye `npm`)
 - [Java Development Kit (JDK)](https://www.oracle.com/java/technologies/downloads/) (versión 17 o superior recomendada)
