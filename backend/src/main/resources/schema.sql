@@ -44,7 +44,7 @@ CREATE TABLE monitoreo (
     semanas_gestacion INT,
     frecuencia_cardiaca_fetal INT,
     movimientos_fetales INT,
-    porcentaje_riesgo DOUBLE,
+    porcentaje_riesgo DECIMAL(10,2),
     CONSTRAINT fk_monitoreo_medico FOREIGN KEY (id_medico) REFERENCES medicos(id_medico) ON DELETE CASCADE,
     CONSTRAINT fk_monitoreo_paciente FOREIGN KEY (id_paciente) REFERENCES pacientes(id_paciente) ON DELETE CASCADE
 );
