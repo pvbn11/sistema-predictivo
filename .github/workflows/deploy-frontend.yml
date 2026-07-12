@@ -34,11 +34,11 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           ###### Configuración de Rutas de tu App ######
-          # El app_location es la carpeta base de tu proyecto Angular
-          app_location: "/frontend"
+          # Esta es la ruta donde reside tu proyecto Angular
+          app_location: "/frontend" 
           api_location: ""  
-          # app_artifact_location es la ruta real donde Angular guardó el index.html
-          # Es relativa a la raíz del repositorio
+          # Esta ruta apunta al directorio final que contiene el index.html
+          # Es relativa al repositorio raíz
           app_artifact_location: "frontend/dist/sistema-prenatal/browser"
-          # skip_app_build evita que Azure intente compilar de nuevo
+          # Desactivamos la construcción automática de Azure para usar la nuestra
           skip_app_build: true
