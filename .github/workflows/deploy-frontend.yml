@@ -33,12 +33,10 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          ###### Configuración de Rutas de tu App ######
-          # Esta es la ruta donde reside tu proyecto Angular
-          app_location: "/frontend" 
-          api_location: ""  
-          # Esta ruta apunta al directorio final que contiene el index.html
-          # Es relativa al repositorio raíz
-          app_artifact_location: "frontend/dist/sistema-prenatal/browser"
-          # Desactivamos la construcción automática de Azure para usar la nuestra
+          ###### Configuración de Rutas Correcta ######
+          # Carpeta base del proyecto
+          app_location: "/frontend"
+          # Ruta relativa dentro de /frontend donde está el index.html
+          app_artifact_location: "dist/sistema-prenatal/browser"
+          # Desactiva Oryx para usar tu compilación previa
           skip_app_build: true
