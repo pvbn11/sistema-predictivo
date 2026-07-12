@@ -34,6 +34,6 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           ###### Configuración de Rutas de tu App ######
-          app_location: "/frontend"
+          app_location: "/"
           api_location: ""  
-          output_location: "dist/sistema-prenatal"
+          output_location: "frontend/dist/sistema-prenatal/browser"
