@@ -36,4 +36,4 @@ jobs:
           ###### Configuración de Rutas de tu App ######
           app_location: "/frontend"
           api_location: ""  
-          output_location: "frontend/dist/sistema-prenatal/browser"
+          output_location: "frontend/dist/sistema-prenatal"
