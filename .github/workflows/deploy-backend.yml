@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'backend/**' # Solo se activa si haces cambios dentro de la carpeta backend
 
 jobs:
   build-and-deploy:
