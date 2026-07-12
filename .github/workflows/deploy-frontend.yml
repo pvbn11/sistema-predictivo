@@ -34,7 +34,11 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           ###### Configuración de Rutas de tu App ######
+          # El app_location es la carpeta base de tu proyecto Angular
           app_location: "/frontend"
           api_location: ""  
-          output_location: "dist/sistema-prenatal/browser"
-          skip_app_build: true # 👈 ESTA LÍNEA EVITA EL ERROR DE ORYX
+          # app_artifact_location es la ruta real donde Angular guardó el index.html
+          # Es relativa a la raíz del repositorio
+          app_artifact_location: "frontend/dist/sistema-prenatal/browser"
+          # skip_app_build evita que Azure intente compilar de nuevo
+          skip_app_build: true
