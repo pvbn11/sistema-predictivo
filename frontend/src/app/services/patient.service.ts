@@ -26,7 +26,13 @@ export interface NotaClinica {
 })
 export class PatientService {
     private http = inject(HttpClient);
-    private apiUrl = 'http://localhost:8080/api/patients';
+    private getBaseUrl(): string {
+        return window.location.hostname === 'localhost' 
+            ? 'http://localhost:8080' 
+            : 'https://tu-app-backend.azurewebsites.net'; // <-- Reemplazar por URL de Azure
+    }
+
+    private apiUrl = `${this.getBaseUrl()}/api/patients`;
 
     getPatients(): Observable<Paciente[]> {
         return this.http.get<Paciente[]>(this.apiUrl);
@@ -40,31 +46,37 @@ export class PatientService {
         return this.http.get<Paciente>(`${this.apiUrl}/${id}`);
     }
 
+    // MODIFICACIÓN: Ruta estática cambiada a dinámica
     getMonitorings(patientId: number): Observable<any[]> {
-        return this.http.get<any[]>(`http://localhost:8080/api/monitoreos/patient/${patientId}`);
+        return this.http.get<any[]>(`${this.getBaseUrl()}/api/monitoreos/patient/${patientId}`);
     }
 
     updatePatient(id: number, patient: Paciente): Observable<Paciente> {
         return this.http.put<Paciente>(`${this.apiUrl}/${id}`, patient);
     }
 
+    // MODIFICACIÓN: Ruta estática cambiada a dinámica
     getNotasClinicas(patientId: number): Observable<NotaClinica[]> {
-        return this.http.get<NotaClinica[]>(`http://localhost:8080/api/notas/patient/${patientId}`);
+        return this.http.get<NotaClinica[]>(`${this.getBaseUrl()}/api/notas/patient/${patientId}`);
     }
 
+    // MODIFICACIÓN: Ruta estática cambiada a dinámica
     createNotaClinica(nota: NotaClinica): Observable<NotaClinica> {
-        return this.http.post<NotaClinica>('http://localhost:8080/api/notas', nota);
+        return this.http.post<NotaClinica>(`${this.getBaseUrl()}/api/notas`, nota);
     }
 
+    // MODIFICACIÓN: Ruta estática cambiada a dinámica
     updateNotaClinica(id: number, nota: NotaClinica): Observable<NotaClinica> {
-        return this.http.put<NotaClinica>(`http://localhost:8080/api/notas/${id}`, nota);
+        return this.http.put<NotaClinica>(`${this.getBaseUrl()}/api/notas/${id}`, nota);
     }
 
+    // MODIFICACIÓN: Ruta estática cambiada a dinámica
     deleteNotaClinica(id: number): Observable<any> {
-        return this.http.delete(`http://localhost:8080/api/notas/${id}`);
+        return this.http.delete(`${this.getBaseUrl()}/api/notas/${id}`);
     }
 
+    // MODIFICACIÓN: Ruta estática cambiada a dinámica
     uploadMonitoreo(formData: FormData): Observable<any> {
-        return this.http.post<any>(`http://localhost:8080/api/monitoreos/predict`, formData);
+        return this.http.post<any>(`${this.getBaseUrl()}/api/monitoreos/predict`, formData);
     }
 }

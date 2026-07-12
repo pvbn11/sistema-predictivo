@@ -44,18 +44,17 @@ public class MonitoreoService {
         Files.write(tempFilePath, file.getBytes());
 
         // Rutas
-        String pythonScriptPath = Paths.get(System.getProperty("user.dir"), "scripts", "predict_ctg.py").toString();
+        String baseDir = System.getProperty("user.dir");
         // Ajustamos la ruta del modelo basada en que user.dir apunta usualmente a "backend" o a la raiz
         // Buscamos si la carpeta Modelo est un nivel arriba
-        Path rootPath = Paths.get(System.getProperty("user.dir")).getParent();
-        String modelPath = rootPath.resolve("Modelo").resolve("modelo_ctg_final.keras").toString();
+        String pythonScriptPath = Paths.get(baseDir, "scripts", "predict_ctg.py").toString();
+        String modelPath = Paths.get(baseDir, "scripts", "modelo_ctg_final.keras").toString();
 
         double probabilidad = 0.0;
         try {
             // Ejecutar el script Python usando explícitamente Python 3.12 (py -3.12)
             ProcessBuilder pb = new ProcessBuilder(
-                    "py",
-                    "-3.12",
+                    "python3",
                     pythonScriptPath,
                     tempFilePath.toString(),
                     String.valueOf(xNorm),

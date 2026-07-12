@@ -84,24 +84,28 @@ export class Profile implements OnInit {
       return;
     }
 
-    this.http.put(`http://localhost:8080/api/doctors/${this.doctor.idMedico}/password`, {
+    // ==========================================
+    // MODIFICACIÓN: ASIGNACIÓN DE URL DINÁMICA
+    // ==========================================
+    const baseUrl = window.location.hostname === 'localhost' 
+      ? 'http://localhost:8080' 
+      : 'https://tu-app-backend.azurewebsites.net'; // <-- Reemplazar por tu URL de Azure
+
+    // MODIFICACIÓN: Se reemplazó la ruta quemada por `${baseUrl}`
+    this.http.put(`${baseUrl}/api/doctors/${this.doctor.idMedico}/password`, {
       currentPassword: this.passwords.current,
       newPassword: this.passwords.new
     }).subscribe({
       next: (res: any) => {
-        // Success
         this.showToast('Contraseña actualizada correctamente', 'success');
         this.passwords = { current: '', new: '', confirm: '' };
         this.isLoading = false;
-        // Check validity again to update UI
         this.checkPasswordStrength();
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Password Update Error:', err);
-        // Check for specific error message regarding incorrect password
         const msg = err.error?.message || 'Error al actualizar contraseña';
-        // Simple case insensitive check
         if ((msg && msg.toLowerCase().includes('incorrect')) || err.status === 400 || err.status === 401) {
           this.showToast('La contraseña actual es incorrecta', 'error');
         } else {
