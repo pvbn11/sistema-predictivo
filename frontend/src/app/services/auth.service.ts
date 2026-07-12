@@ -12,7 +12,7 @@ export class AuthService {
     private getBaseUrl(): string {
         return window.location.hostname === 'localhost' 
             ? 'http://localhost:8080' 
-            : 'https://tu-app-backend.azurewebsites.net'; // <-- Reemplazar por URL de Azure cuando la tengas
+            : 'https://api-sistema-predictivo-f2djd7dseuh0dve3.centralus-01.azurewebsites.net'; // <-- Reemplazar por URL de Azure cuando la tengas
     }
 
     // Acoplamos la URL dinámica con la ruta de autenticación
