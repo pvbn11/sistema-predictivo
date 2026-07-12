@@ -33,6 +33,6 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           ###### Configuración de Rutas de tu App ######
-          app_location: "/" # Directorio raíz donde está el código de Angular
+          app_location: "/frontend" # Directorio raíz donde está el código de Angular
           api_location: ""  # Se deja vacío porque tu API ya corre independiente en App Service
-          output_location: "dist/sistema-prenatal/browser" # Ruta de salida exacta deducida de tu angular.json
+          output_location: "dist/sistema-prenatal" # Ruta de salida exacta deducida de tu angular.json
