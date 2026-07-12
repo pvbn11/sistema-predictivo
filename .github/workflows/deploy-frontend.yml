@@ -35,9 +35,10 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          # Carpeta donde vive tu proyecto Angular
-          app_location: "/frontend"
-          # Ruta exacta donde Angular generó el index.html (Relativa a app_location)
-          app_artifact_location: "dist/sistema-prenatal/browser"
-          # Evitamos que Oryx intente reconstruir
+          ###### RUTA DEFINITIVA ######
+          # Apuntamos a la carpeta donde está el index.html
+          app_location: "frontend/dist/sistema-prenatal/browser"
+          api_location: ""  
+          # Ya no necesitamos app_artifact_location, al poner la ruta completa arriba
+          # Azure la toma como la raíz del sitio web.
           skip_app_build: true
