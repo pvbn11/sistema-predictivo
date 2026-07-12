@@ -8,6 +8,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write  # Necesario para poder subir la imagen al registro
 
     steps:
     - name: Checkout source code
@@ -16,7 +19,6 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    # Autenticación segura usando el secreto que acabas de guardar
     - name: Log in to Azure
       uses: azure/login@v2
       with:
@@ -35,10 +37,11 @@ jobs:
         context: ./backend
         file: ./backend/Dockerfile
         push: true
-        tags: ghcr.io/${{ github.repository }}/backend-api:latest
+        # Se cambió a un formato que GitHub permite publicar sin conflictos de organización
+        tags: ghcr.io/pvbn11/backend-api:latest
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v3
       with:
         app-name: 'api-sistema-predictivo'
-        images: 'ghcr.io/${{ github.repository }}/backend-api:latest'
+        images: 'ghcr.io/pvbn11/backend-api:latest'
