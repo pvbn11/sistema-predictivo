@@ -87,9 +87,7 @@ export class Profile implements OnInit {
     // ==========================================
     // MODIFICACIÓN: ASIGNACIÓN DE URL DINÁMICA
     // ==========================================
-    const baseUrl = window.location.hostname === 'localhost' 
-      ? 'http://localhost:8080' 
-      : 'https://api-sistema-predictivo-f2djd7dseuh0dve3.centralus-01.azurewebsites.net'; // <-- Reemplazar por tu URL de Azure
+    const baseUrl = 'https://api-sistema-predictivo-f2djd7dseuh0dve3.centralus-01.azurewebsites.net'; // <-- Reemplazar por tu URL de Azure
 
     // MODIFICACIÓN: Se reemplazó la ruta quemada por `${baseUrl}`
     this.http.put(`${baseUrl}/api/doctors/${this.doctor.idMedico}/password`, {

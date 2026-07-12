@@ -44,3 +44,8 @@ Thumbs.db
 backend/data/prenataldb.lock.db
 backend/data/prenataldb.mv.db
 backend/data/prenataldb.mv.db
+
+# Especificaciones para la subcarpeta Frontend
+frontend/node_modules/
+frontend/.angular/
+frontend/dist/

@@ -27,9 +27,7 @@ export interface NotaClinica {
 export class PatientService {
     private http = inject(HttpClient);
     private getBaseUrl(): string {
-        return window.location.hostname === 'localhost' 
-            ? 'http://localhost:8080' 
-            : 'https://api-sistema-predictivo-f2djd7dseuh0dve3.centralus-01.azurewebsites.net'; // <-- Reemplazar por URL de Azure
+        return 'https://api-sistema-predictivo-f2djd7dseuh0dve3.centralus-01.azurewebsites.net'; // <-- Reemplazar por URL de Azure
     }
 
     private apiUrl = `${this.getBaseUrl()}/api/patients`;
