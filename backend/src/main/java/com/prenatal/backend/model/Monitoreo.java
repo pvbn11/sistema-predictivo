@@ -29,7 +29,7 @@ public class Monitoreo {
     private String nivelRiesgo; // Óptimo, Alterado
 
     @Lob
-    @Column(columnDefinition = "BLOB")
+    @Column(name = "imagen_ctg", columnDefinition = "VARBINARY(MAX)")
     private byte[] imagenCtg;
 
     private String observaciones;
